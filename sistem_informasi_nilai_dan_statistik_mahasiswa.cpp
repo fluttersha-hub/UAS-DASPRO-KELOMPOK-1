@@ -9,7 +9,7 @@ int jumlah = 0;
 // Array Data mahasiswa
 string nama[MAX]; //max = 100
 string nim[MAX];
-float nilai[MAX][JUMLAH_MK][3]; // 0=tugas,1=uts,2=uas,3=nilai akhir
+float nilai[MAX][JUMLAH_MK][4]; // 0=tugas,1=uts,2=uas,3=nilai akhir
 string namaMK[JUMLAH_MK] = {"Dasar Pemrograman", "Logika Matematika", "Kalkulus"};
 
 // Modul garis pembatas
@@ -22,14 +22,14 @@ void hitungNilaiAkhir(int mhs) {
     float total = 0;
     for (int mk = 0; mk < JUMLAH_MK; mk++) {
         nilai[mhs][mk][4] = nilai[mhs][mk][0] * 0.3f + nilai[mhs][mk][1] * 0.3f + nilai[mhs][mk][2] * 0.4f;
-        total += nilai[mhs][mk][3];
+        total += nilai[mhs][mk][4];
     }
 }
 
 float hitungRataRata(int mhs) {
     float total = 0;
     for (int mk = 0; mk < JUMLAH_MK; mk++) {
-        total += nilai[mhs][mk][3];
+        total += nilai[mhs][mk][4];
     }
     return total / JUMLAH_MK;
 }
