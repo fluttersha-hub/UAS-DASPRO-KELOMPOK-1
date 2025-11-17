@@ -7,7 +7,7 @@ const int JUMLAH_MK = 3;
 int jumlah = 0;
 
 // Array Data mahasiswa
-string nama[MAX]; //max = 100
+string nama[MAX];
 string nim[MAX];
 float nilai[MAX][JUMLAH_MK][4]; // 0=tugas,1=uts,2=uas,3=nilai akhir
 string namaMK[JUMLAH_MK] = {"Dasar Pemrograman", "Logika Matematika", "Kalkulus"};
@@ -19,17 +19,17 @@ void garis() {
 // ---------------------------------------------------------
 // Modul hitung nilai, rata-rata dan status kelulusan
 void hitungNilaiAkhir(int mhs) {
-    float total = 0;
     for (int mk = 0; mk < JUMLAH_MK; mk++) {
-        nilai[mhs][mk][4] = nilai[mhs][mk][0] * 0.3f + nilai[mhs][mk][1] * 0.3f + nilai[mhs][mk][2] * 0.4f;
-        total += nilai[mhs][mk][4];
+        nilai[mhs][mk][3] = nilai[mhs][mk][0] * 0.3f
+                          + nilai[mhs][mk][1] * 0.3f
+                          + nilai[mhs][mk][2] * 0.4f;
     }
 }
 
 float hitungRataRata(int mhs) {
     float total = 0;
     for (int mk = 0; mk < JUMLAH_MK; mk++) {
-        total += nilai[mhs][mk][4];
+        total += nilai[mhs][mk][3];
     }
     return total / JUMLAH_MK;
 }
@@ -90,7 +90,7 @@ void tampilkanData() {
     }
 
     garis();
-    cout << "\nDATA MAHASISWA\n";
+    cout << "\n===================== DATA MAHASISWA ======================\n";
     garis();
 
     for (int mhs = 0; mhs < jumlah; mhs++) {
@@ -127,8 +127,9 @@ void tampilkanStatistik() {
     }
 
     garis();
-    cout << "\n " << " " << " " << "STATISTIK NILAI MAHASISWA";
-    cout << "\nRata-rata keseluruhan  : " << total / jumlah << endl;
+    cout << "\nSTATISTIK NILAI MAHASISWA\n";
+    cout << "\nJumlah Mahasiswa       : " << jumlah << "\n";
+    cout << "Rata-rata keseluruhan  : " << total / jumlah << endl;
     cout << "Nilai tertinggi        : " << tertinggi << endl;
     cout << "Nilai terendah         : " << terendah << endl << endl;
     garis();
@@ -201,7 +202,7 @@ int main() {
             case 4: cariMahasiswa(); break;
             case 5:
                 garis();
-                cout << "Terima kasih telah menggunakan program!\n";
+                cout << "Terima kasih telah menggunakan program kami !\n";
                 garis();
                 break;
             default:
