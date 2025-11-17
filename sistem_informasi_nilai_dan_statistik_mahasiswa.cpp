@@ -3,26 +3,26 @@
 #include <string>
 using namespace std;
 
-const int MAX = 40;
+const int MAX = 100;
 const int JUMLAH_MK = 3;
 int jumlah = 0;
 
 // Array Data mahasiswa
-string nama[MAX];
+string nama[MAX]; //max = 100
 string nim[MAX];
-float nilai[MAX][JUMLAH_MK][4]; // 0=tugas,1=uts,2=uas,3=nilai akhir
+float nilai[MAX][JUMLAH_MK][3]; // 0=tugas,1=uts,2=uas,3=nilai akhir
 string namaMK[JUMLAH_MK] = {"Dasar Pemrograman", "Logika Matematika", "Kalkulus"};
 
 // Modul garis pembatas
 void garis() {
     cout << "------------------------------------------------------------\n";
 }
-
+// ---------------------------------------------------------
 // Modul hitung nilai, rata-rata dan status kelulusan
 void hitungNilaiAkhir(int mhs) {
     float total = 0;
     for (int mk = 0; mk < JUMLAH_MK; mk++) {
-        nilai[mhs][mk][3] = nilai[mhs][mk][0] * 0.3f + nilai[mhs][mk][1] * 0.3f + nilai[mhs][mk][2] * 0.4f;
+        nilai[mhs][mk][4] = nilai[mhs][mk][0] * 0.3f + nilai[mhs][mk][1] * 0.3f + nilai[mhs][mk][2] * 0.4f;
         total += nilai[mhs][mk][3];
     }
 }
@@ -38,17 +38,27 @@ float hitungRataRata(int mhs) {
 string cekStatus(float rata) {
     return (rata >= 60) ? "Lulus" : "Tidak Lulus";
 }
-
+// ---------------------------------------------------------
 // Modul input data
 void inputData() {
     int n;
+    garis();
     cout << "Masukkan jumlah mahasiswa: ";
     cin >> n;
     cin.ignore();
+
+    // Jika pengguna input 0
+    if (n == 0) {
+        garis();
+        cout << "Input dibatalkan, program kembali ke menu utama...\n";
+        garis();
+        return; // Keluar dari modul dan balik ke menu utama
+    }
+
     garis();
 
     for (int mhs = jumlah; mhs < jumlah + n; mhs++) {
-        cout << "\nData Mahasiswa ke-" << mhs + 1 << endl;
+        cout << "Data Mahasiswa ke-" << mhs + 1 << endl;
         cout << "Nama: ";
         getline(cin, nama[mhs]);
         cout << "NIM: ";
@@ -79,29 +89,33 @@ void tampilkanData() {
         garis();
         return;
     }
+
+    garis();
+
     // Lebar total tabel
     int lebarTotal = 60;
     string judul = "DATA MAHASISWA";
 
-    // Hitung spasi agar judul center
+    // Hitung spasi agar judul di tengah
     int spasi = (lebarTotal - judul.length()) / 2;
 
-    cout << "\n";
-    cout << string(spasi, ' ') << judul << "\n";
+    cout << "\n" << string(spasi, ' ') << judul << "\n";
     garis();
     cout << left << setw(20) << "Nama"
-         << setw(15) << "NIM"
-         << setw(15) << "Rata-Rata"
+         << setw(13) << "NIM"
+         << setw(13) << "Rata-Rata"
          << "Status" << endl;
     garis();
 
     for (int mhs = 0; mhs < jumlah; mhs++) {
         float rata = hitungRataRata(mhs);
         cout << left << setw(20) << nama[mhs]
-             << setw(15) << nim[mhs]
-             << setw(15) << fixed << setprecision(2) << rata
+             << setw(13) << nim[mhs]
+             << setw(13) << fixed << setprecision(2) << rata
              << cekStatus(rata) << endl;
     }
+    cout << "\n";
+    garis();
 }
 
 // Modul tampilkan statistik nilai
@@ -124,30 +138,26 @@ void tampilkanStatistik() {
         if (rata < terendah) terendah = rata;
     }
 
-    // Lebar total tabel
-    int lebarTotal = 60;
-    string judul = "STATISTIK NILAI MAHASISWA";
-
-    // Hitung spasi agar judul center
-    int spasi = (lebarTotal - judul.length()) / 2;
-
-    cout << "\n";
-    cout << string(spasi, ' ') << judul << "\n";
     garis();
-    cout << "Rata-rata keseluruhan  : " << fixed << setprecision(2) << total / jumlah << endl;
+    cout << "\n " << " " << " " << "STATISTIK NILAI MAHASISWA";
+    cout << "\nRata-rata keseluruhan  : " << fixed << setprecision(2) << total / jumlah << endl;
     cout << "Nilai tertinggi        : " << tertinggi << endl;
-    cout << "Nilai terendah         : " << terendah << endl;
+    cout << "Nilai terendah         : " << terendah << endl << endl;
+    garis();
 }
 
-// Modul pencarian berdasarkan NIM
+// Modul mencari data mahasiswa berdasarkan NIM
 void cariMahasiswa() {
     if (jumlah == 0) {
-        cout << "\nBelum ada data mahasiswa!\n";
+        garis();
+        cout << "Belum ada data mahasiswa.\n";
+        garis();
         return;
     }
 
     string cariNIM;
-    cout << "Masukkan NIM yang ingin dicari: ";
+    garis();
+    cout << "Masukkan NIM mahasiswa yang ingin dicari: ";
     getline(cin, cariNIM);
 
     bool ditemukan = false;
@@ -156,18 +166,18 @@ void cariMahasiswa() {
             ditemukan = true;
             garis();
             cout << "Data ditemukan!\n";
-            cout << "Nama Mahasiswa: " << nama[mhs] << endl;
-            cout << "NIM           : " << nim[mhs] << endl;
+            cout << "\nNama           : " << nama[mhs] << endl;
+            cout << "NIM            : " << nim[mhs] << endl;
             float rata = hitungRataRata(mhs);
-            cout << "Rata-Rata     : " << fixed << setprecision(2) << rata << endl;
-            cout << "Status        : " << cekStatus(rata) << endl;
+            cout << "Rata-Rata      : " << fixed << setprecision(2) << rata << endl;
+            cout << "Status         : " << cekStatus(rata) << endl;
             cout << "\nDetail Nilai per Mata Kuliah:\n";
             for (int mk = 0; mk < JUMLAH_MK; mk++) {
-                cout << "  " << namaMK[mk] << " - "
-                     << "Tugas: " << nilai[mhs][mk][0] << ", "
-                     << "UTS: " << nilai[mhs][mk][1] << ", "
-                     << "UAS: " << nilai[mhs][mk][2] << ", "
-                     << "Nilai Akhir: " << fixed << setprecision(2) << nilai[mhs][mk][3] << endl;
+                cout << endl << "  " << namaMK[mk]
+                     << "\n - Tugas: " << nilai[mhs][mk][0]
+                     << "\n - UTS: " << nilai[mhs][mk][1]
+                     << "\n - UAS: " << nilai[mhs][mk][2]
+                     << "\n - Nilai Akhir: " << fixed << setprecision(2) << nilai[mhs][mk][3] << endl;
             }
             garis();
             break;
@@ -175,18 +185,23 @@ void cariMahasiswa() {
     }
 
     if (!ditemukan) {
-        cout << "\nMahasiswa dengan NIM " << cariNIM << " tidak ditemukan!\n";
+        garis();
+        cout << "\nMahasiswa dengan NIM " << cariNIM << " tidak ditemukan!\n" << endl;
+        garis();
     }
 }
 
 // Modul ubah data mahasiswa berdasarkan NIM
 void ubahMahasiswa() {
     if (jumlah == 0) {
-        cout << "\nBelum ada data mahasiswa!\n";
+        garis();
+        cout << "Belum ada data mahasiswa.\n";
+        garis();
         return;
     }
 
     string ubahNIM;
+    garis();
     cout << "Masukkan NIM mahasiswa yang ingin diubah: ";
     getline(cin, ubahNIM);
 
@@ -195,10 +210,11 @@ void ubahMahasiswa() {
         if (nim[mhs] == ubahNIM) {
             ditemukan = true;
             garis();
-            cout << "Data lama mahasiswa:\n";
-            cout << "Nama: " << nama[mhs] << endl;
+            cout << "Data Mahasiswa\n";
+            cout << "Nama   : " << nama[mhs] << endl;
+            cout << "NIM    : " << nim[mhs] << endl;
             for (int mk = 0; mk < JUMLAH_MK; mk++) {
-                cout << "Mata Kuliah: " << namaMK[mk] << endl;
+                cout << "\n" << "Mata Kuliah: " << namaMK[mk] << endl;
                 cout << "  Tugas       : " << nilai[mhs][mk][0] << endl;
                 cout << "  UTS         : " << nilai[mhs][mk][1] << endl;
                 cout << "  UAS         : " << nilai[mhs][mk][2] << endl;
@@ -206,14 +222,19 @@ void ubahMahasiswa() {
             }
 
             char konfirmasi;
-            cout << "\nApakah Anda ingin mengubah data ini? (y/n): ";
+            garis();
+            cout << "\nApakah Anda ingin mengubah data ini? (y/n): \n";
             cin >> konfirmasi;
             cin.ignore();
+            cout << "\n";
 
             if (konfirmasi == 'y' || konfirmasi == 'Y') {
-                cout << "\nMasukkan data baru:\n";
+                garis();
+                cout << "Masukkan data baru:\n";
                 cout << "Nama: ";
                 getline(cin, nama[mhs]);
+                cout << "NIM: ";
+                getline(cin, nim[mhs]);
 
                 for (int mk = 0; mk < JUMLAH_MK; mk++) {
                     cout << "\nMata Kuliah: " << namaMK[mk] << endl;
@@ -227,26 +248,36 @@ void ubahMahasiswa() {
                 cin.ignore();
 
                 hitungNilaiAkhir(mhs);
-                cout << "\nData berhasil diperbarui!\n";
+                garis();
+                cout << "Data mahasiswa berhasil diperbarui!\n";
+                garis();
             } else {
-                cout << "\nPerubahan dibatalkan.\n";
+                garis();
+                cout << "Perubahan dibatalkan.\n";
+                garis();
             }
             break;
         }
     }
 
-    if (!ditemukan)
-        cout << "\nMahasiswa dengan NIM " << ubahNIM << " tidak ditemukan!\n";
+    if (!ditemukan){
+        garis();
+        cout << "\nMahasiswa dengan NIM " << ubahNIM << " tidak ditemukan!\n" << endl;
+        garis();
+    }
 }
 
 // Modul hapus data mahasiswa berdasarkan NIM
 void hapusMahasiswa() {
     if (jumlah == 0) {
-        cout << "\nBelum ada data mahasiswa!\n";
+garis();
+cout << "Belum ada data mahasiswa.\n";
+    garis();
         return;
     }
 
     string hapusNIM;
+    garis();
     cout << "Masukkan NIM mahasiswa yang ingin dihapus: ";
     getline(cin, hapusNIM);
 
@@ -255,9 +286,11 @@ void hapusMahasiswa() {
         if (nim[mhs] == hapusNIM) {
             ditemukan = true;
             char konfirmasi;
-            cout << "Apakah Anda yakin ingin menghapus data " << nama[mhs] << " (y/n)? ";
+            garis();
+            cout << "\nApakah Anda yakin ingin menghapus data " << nama[mhs] << " [" << nim[mhs] << "] " << "(y/n)? \n";
             cin >> konfirmasi;
             cin.ignore();
+            cout << "\n";
 
             if (konfirmasi == 'y' || konfirmasi == 'Y') {
                 // Geser data ke kiri karena ada yang dihapus
@@ -271,16 +304,22 @@ void hapusMahasiswa() {
                     }
                 }
                 jumlah--;
-                cout << "\nData mahasiswa berhasil dihapus!\n";
+                garis();
+                cout << "Data mahasiswa berhasil dihapus!\n";
+                garis();
             } else {
-                cout << "\nPenghapusan dibatalkan.\n";
+                garis();
+                cout << "Penghapusan dibatalkan.\n";
+                garis();
             }
             break;
         }
     }
-
-    if (!ditemukan)
-        cout << "\nMahasiswa dengan NIM " << hapusNIM << " tidak ditemukan!\n";
+    if (!ditemukan) {
+        garis();
+        cout << "\nMahasiswa dengan NIM " << hapusNIM << " tidak ditemukan!\n" << endl;;
+        garis();
+    }
 }
 
 // Fungsi Utama
@@ -293,7 +332,7 @@ int main() {
         cout << "2. Tampilkan Data Mahasiswa\n";
         cout << "3. Statistik Nilai\n";
         cout << "4. Cari Mahasiswa berdasarkan NIM\n";
-        cout << "5. Edit Data Mahasiswa\n";
+        cout << "5. Ubah Data Mahasiswa\n";
         cout << "6. Hapus Data Mahasiswa\n";
         cout << "7. Keluar\n";
         cout << "Pilih menu: ";
@@ -302,37 +341,21 @@ int main() {
 
         switch (pilihan) {
             case 1:
-                cout << "\n";
-                garis();
                 inputData();
                 break;
             case 2:
-                cout << "\n";
-                garis();
                 tampilkanData();
-                cout << "\n";
-                garis();
                 break;
             case 3:
-                cout << "\n";
-                garis();
                 tampilkanStatistik();
-                cout << "\n";
-                garis();
                 break;
             case 4:
-                cout << "\n";
-                garis();
                 cariMahasiswa();
                 break;
             case 5:
-                cout << "\n";
-                garis();
                 ubahMahasiswa();
                 break;
             case 6:
-                cout << "\n";
-                garis();
                 hapusMahasiswa();
                 break;
             case 7:
@@ -342,7 +365,6 @@ int main() {
                 garis();
                 break;
             default:
-                cout << "\n";
                 garis();
                 cout << "Pilihan tidak valid, coba lagi.\n";
                 garis();
